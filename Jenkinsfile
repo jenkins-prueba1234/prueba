@@ -1,10 +1,12 @@
 pipeline {
+  /* Declarative Pipeline 
+  @autor: Jaime Gaona */
     agent any
 
     stages {
         stage('Build') {
             steps {
-                echo 'Building..'
+                echo "Building ${env.BUILD_NUMBER} with change id: ${env.CHANGE_ID}"
             }
         }
         stage('Test') {
@@ -12,9 +14,20 @@ pipeline {
                 echo 'Testing..'
             }
         }
-        stage('Deploy') {
+        stage('Production Deploy') {
+            when {
+              branch release
+            }
             steps {
-                echo 'Deploying....'
+                echo 'Deploying to stagin'
+            }
+        }
+        stage('Staging Deploy') {
+            when {
+              branch master
+            }
+            steps {
+                echo 'Deploying to stagin'
             }
         }
     }
